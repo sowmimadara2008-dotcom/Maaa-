@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Queen 👑❤️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Kavivanar&display=swap');
+        body {
+            font-family: 'Poppins', 'Kavivanar', sans-serif;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffb3c6 100%);
+            overflow: hidden;
+        }
+        .heart {
+            position: absolute;
+            background-color: #ff4d6d;
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            transform: rotate(-45deg);
+            animation: floatUp 5s linear infinite;
+            bottom: -20px;
+            pointer-events: none;
+        }
+        .heart:before, .heart:after {
+            content: "";
+            background-color: #ff4d6d;
+            border-radius: 50%;
+            position: absolute;
+            width: 15px;
+            height: 15px;
+        }
+        .heart:before { top: -10px; left: 0; }
+        .heart:after { left: 10px; top: 0; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(-45deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(-45deg); opacity: 0; }
+        }
+        .no-btn {
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative select-none">
+
+    <!-- Floating Hearts -->
+    <div id="hearts-container" class="absolute inset-0 overflow-hidden"></div>
+
+    <!-- Audio Tag (Your uploaded bgm.mp3) -->
+    <audio id="bgm" src="bgm.mp3" loop></audio>
+
+    <!-- Main Container Card -->
+    <div class="bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl max-w-md w-full text-center z-10 animate__animated animate__fadeIn relative min-h-[450px] flex flex-col justify-between border border-pink-200">
+        
+        <!-- PAGES CONTAINER -->
+        <div id="pages-content" class="flex-grow flex flex-col justify-center items-center">
+            <!-- Content will be injected via JavaScript -->
+        </div>
+
+        <!-- BUTTONS CONTAINER -->
+        <div id="buttons-container" class="mt-6 flex justify-around items-center relative min-h-[60px] w-full">
+            <!-- Buttons will be injected via JavaScript -->
+        </div>
+
+    </div>
+
+    <script>
+        // Pages Data Structure
+        const pages = [
+            {
+                // PAGE 1: Intro Request
+                gif: "gif1.gif", // Replace with your GIF filename
+                emoji: "🙇‍♀️🛐",
+                title: "Enna Manuchuraga...",
+                text: "En mela evlo kovam irundhalum paravala... ana intha dummy un kitta ketkuratha full-aa konjam kelen chellam. En mela unaku nambikai pochu nu sonnathu en uyirae pora maari iruku. Please enna manuchudu...",
+                yesText: "Manuchuten ❤️",
+                noText: "Illa 😡"
+            },
+            {
+                // PAGE 2: The Truth Explanation
+                gif: "gif2.gif",
+                emoji: "🥺❤️",
+                title: "En Anbe, En Unmai Kadhale",
+                text: "Nee thappa nenaikura en girl friend (my friend), enaku verum oru sakodhari maari thaan chellam. Avaluku anga koduthirukra mariyaathai vera, unaku en idhayathula kuduthirukra idham vera! En mela unaku ulla sandhegatha intha nodiyodu thooki potrudu plss.",
+                yesText: "Next Page ➡️",
+                noText: "Namba matten 😒"
+            },
+            {
+                // PAGE 3: English Poet Quote (Shakespeare)
+                gif: "gif3.gif",
+                emoji: "📜✨",
+                title: "William Shakespeare Said...",
+                text: "<span class='italic text-gray-600 block my-2'>'Love looks not with the eyes, but with the mind, And therefore is winged Cupid painted blind.'</span><br>Enoda manasum kannum unna mattum thaan paakuthu chellam. Unna emathitadhaga nee nenaikurathu enoda anba thappa purinjikitadhal thaan. Naa unaku mattume sondham!",
+                yesText: "I Love This 💖",
+                noText: "Poi solra 🤫"
+            },
+            {
+                // PAGE 4: Tamil Poet Quote (Bharathiyar)
+                gif: "gif4.gif",
+                emoji: "🪶❤️",
+                title: "மகாகவி பாரதியார் வரிகள்...",
+                text: "<span class='font-bold text-rose-700 block my-2 text-base' style='font-family: Kavivanar, sans-serif;'>'சுட்டும் விழிச்சுடர் தான் கண்ணம்மா, சூரிய சந்திரரோ?<br>வட்டக் கரிய விழி கண்ணம்மா, வானக்கடல் தானோ!'</span><br>En ulagame un kannu kulla thaan iruku. En uyir ulla varai unaku naa unmaiyana lover-aa mattum thaan irupen. Enna thavira unna yaarum ivlo love panna mudiyathu!",
+                yesText: "Unmaithaan 🥰",
+                noText: "Illaவே Illa 🏃‍♀️"
+            },
+            {
+                // PAGE 5: Final Apology and Request
+                gif: "gif5.gif",
+                emoji: "🧎‍♂️💍",
+                title: "En Thangamey, En Chella Klandhaiye",
+                text: "Inime unaku pidikatha ethuvum en life-la nadakathu. Nee eppo call panni pesi en mela ulla kovatha kuraika pora? Enna thitnalum paravala, ana pesaama mattum irukadha papa... Enaku yaaru iruka unna thavira?",
+                yesText: "I Forgive You Completely 💕",
+                noText: "Innum Kovam Pogala 😤"
+            },
+            {
+                // PAGE 6: Success Page (No option available here!)
+                gif: "gif6.gif", // Use a cute Dudu Kissing GIF here
+                emoji: "😘💋💍",
+                title: "Thank You En Idhayamae!!",
+                text: "I Love You So Much My Ponpondatti! ❤️ Intha sirippu un mugathula eppovum irukanum. En uyir moochu ulla varai unna kamma pola paathupen. Ippo call panni en kitta pesu chellam! Waiting...",
+                yesText: "Call You Now 📞",
+                noText: "" // No button hidden on final page
+            }
+        ];
+
+        let currentPage = 0;
+        const bgm = document.getElementById('bgm');
+
+        function renderPage(pageIndex) {
+            const page = pages[pageIndex];
+            const contentContainer = document.getElementById('pages-content');
+            const buttonsContainer = document.getElementById('buttons-container');
+
+            // Render Content
+            contentContainer.innerHTML = `
+                <div class="text-6xl mb-4 animate__animated animate__bounceIn">${page.emoji}</div>
+                <!-- GIF Display Element -->
+                <div class="w-40 h-40 mb-4 rounded-xl overflow-hidden shadow-inner bg-pink-50 flex items-center justify-center">
+                    <img src="${page.gif}" alt="Cute Animation" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=200&auto=format&fit=crop'" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-xl font-bold text-gray-800 mb-2 animate__animated animate__fadeInDown">${page.title}</h1>
+                <p class="text-gray-600 text-sm leading-relaxed px-2 text-center animate__animated animate__fadeIn">${page.text}</p>
+            `;
+
+            // Render Buttons
+            buttonsContainer.innerHTML = '';
+
+            // Yes Button
+            const yesBtn = document.createElement('button');
+            yesBtn.className = "bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform duration-200 cursor-pointer z-10";
+            yesBtn.innerHTML = page.yesText;
+            yesBtn.onclick = () => nextPage();
+            buttonsContainer.appendChild(yesBtn);
+
+            // No Button (Only if it exists in data)
+            if (page.noText) {
+                const noBtn = document.createElement('button');
+                noBtn.className = "bg-gray-200 text-gray-700 font-semibold py-2 px-6 rounded-full shadow-sm no-btn cursor-pointer z-10";
+                noBtn.innerHTML = page.noText;
+                
+                // Escape logic for Desktop hover and Mobile touch start
+                const escapeAction = (e) => {
+                    e.preventDefault();
+                    // Get container dimensions to keep the button inside the card safely
+                    const container = document.getElementById('buttons-container');
+                    const maxX = container.clientWidth - noBtn.clientWidth;
+                    const maxY = container.clientHeight - noBtn.clientHeight;
+                    
+                    // Generate random positions (and occasionally jump slightly outside button box for fun)
+                    const randomX = Math.floor(Math.random() * (maxX + 100)) - 50;
+                    const randomY = Math.floor(Math.random() * (maxY + 80)) - 40;
+                    
+                    noBtn.style.left = randomX + 'px';
+                    noBtn.style.top = randomY + 'px';
+                };
+
+                noBtn.addEventListener('mouseover', escapeAction);
+                noBtn.addEventListener('touchstart', escapeAction);
+                buttonsContainer.appendChild(noBtn);
+            }
+        }
+
+        function nextPage() {
+            // First Page specific trigger for BGM
+            if (currentPage === 0) {
+                bgm.play().catch(e => console.log("Audio trigger blocked or waiting"));
+            }
+
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                renderPage(currentPage);
+                // Burst of extra hearts on transition
+                for(let i=0; i<8; i++) setTimeout(createHeart, i * 150);
+            } else {
+                // Final action if they click on page 6 button
+                alert("Thank you chellam! Text me or Call me fast! 😍");
+            }
+        }
+
+        // Floating Hearts Generator
+        function createHeart() {
+            const container = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.opacity = Math.random() * 0.7 + 0.3;
+            const size = Math.random() * 10 + 10;
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            
+            container.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // Initial Load
+        renderPage(currentPage);
+    </script>
+</body>
+</html>
